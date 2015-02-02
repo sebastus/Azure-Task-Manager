@@ -1,0 +1,13 @@
+{"createdeployment": {
+	"SubscriptionName":"GOLIVE-Azure",
+	"Package":
+		{"PackageName":"AzureTableWCFDataService.Azure.cspkg", 
+		  "ConfigFileName":"ServiceConfiguration.Cloud.cscfg"},
+	"Service":
+		{"Label":"v1",
+		 "ServiceName":"golive-wcfdataservice",
+		 "CreateServiceIfNotExist":true,
+		 "Location":"West US",
+		 "Slot":"production"}
+	}
+}

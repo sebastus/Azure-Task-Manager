@@ -1,0 +1,13 @@
+{ 
+    'Subscriptions': [
+        {
+            'SubscriptionName': 'subscriptionName',
+            'SubscriptionId': 'subscriptionId',
+            'MgtCertFileName': 'CertFileName.pfx',
+			'MgtCertPassword': 'certPassword',
+			'PackageStorageAcct':'storageAcctName',
+			'PackageStorageKey':'reallyLongStorageAcctKey',
+			'PackageContainerName':'atmpackages'
+        }
+    ]
+}

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
+using Helpers;
+using Newtonsoft.Json;
 
 namespace AzureTaskManager
 {
@@ -14,9 +16,29 @@ namespace AzureTaskManager
         // AzureWebJobsDashboard and AzureWebJobsStorage
         static void Main()
         {
+            RootConfigurationObject atmConfiguration = null;
+
+            Storage storage = new Storage();
+            string configJSON = storage.GetConfigurationFile();
+            try
+            {
+                atmConfiguration = JsonConvert.DeserializeObject<RootConfigurationObject>(configJSON);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error deserializing configuration file: {0}", ex.Message);
+            }
+
+            foreach (var x in atmConfiguration.Subscriptions)
+            {
+                StorageAccounts.Instance.Add(x.PackageStorageAcct, x.PackageStorageKey, x.PackageContainerName);
+                Subscriptions.Instance.Add(x);
+            }
+
             var host = new JobHost();
             // The following code ensures that the WebJob will be running continuously
             host.RunAndBlock();
         }
+
     }
 }

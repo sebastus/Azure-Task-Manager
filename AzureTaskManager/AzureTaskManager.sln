@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureTaskManager", "AzureTaskManager.csproj", "{50814522-6239-4AF2-8724-262FB59EA1E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "..\Helpers\Helpers.csproj", "{913B623E-7E6A-4E15-B7DB-FA75089B14D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{50814522-6239-4AF2-8724-262FB59EA1E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50814522-6239-4AF2-8724-262FB59EA1E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50814522-6239-4AF2-8724-262FB59EA1E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{913B623E-7E6A-4E15-B7DB-FA75089B14D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{913B623E-7E6A-4E15-B7DB-FA75089B14D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{913B623E-7E6A-4E15-B7DB-FA75089B14D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{913B623E-7E6A-4E15-B7DB-FA75089B14D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
