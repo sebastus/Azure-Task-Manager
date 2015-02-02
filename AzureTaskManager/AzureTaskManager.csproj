@@ -130,6 +130,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MyApp.config" />
     <None Include="App.config" />
     <None Include="config.json" />
     <None Include="goliveConfig.json" />
