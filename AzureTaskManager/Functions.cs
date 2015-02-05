@@ -58,6 +58,14 @@ namespace AzureTaskManager
                 log.WriteLine("Code returned from CreateService: {0}", code.ToString());
             }
 
+            // see if there's a cert to install
+            if (!string.IsNullOrEmpty(r.createdeployment.Service.ServiceCertificate) && r.createdeployment.Service.InstallCertificateIfNotPresent)
+            {
+                log.WriteLine("Installing service certificate into hosted service: {0}", r.createdeployment.Service.ServiceName);
+                HttpStatusCode code = CreateCertificate(creds, r, sub, log);
+                log.WriteLine("Code returned from CreateCertificate: {0}", code.ToString());
+            }
+
             // get the storage account for the subscription
             string acctName = Subscriptions.Instance.Get(r.createdeployment.SubscriptionName).PackageStorageAcct;
 
@@ -79,7 +87,36 @@ namespace AzureTaskManager
 
             // create the deployment
             string requestId = CreateDeployment(creds, r, sub, log);
+            if (string.IsNullOrEmpty(requestId))
+            {
+                string msg = string.Format("Deployment of service {0} did not succeed.", r.createdeployment.Service.ServiceName);
+                LogExit(msg, r.createdeployment.Service.ServiceName, log);
+                return;
+            }
+            else
+            {
+                string msg = string.Format("Deployment of service {0} succeeded with request ID: {1}.", r.createdeployment.Service.ServiceName, requestId);
+                LogExit(msg, r.createdeployment.Service.ServiceName, log);
+                return;
+            }
 
+        }
+
+        private static HttpStatusCode CreateCertificate(CertificateCloudCredentials creds, RootCreateDeploymentObject r, Subscription sub, TextWriter log)
+        {
+            byte[] certBytes = storageObject.GetBlockBlobBytes(r.createdeployment.Service.ServiceCertificate);
+            
+            ServiceCertificateCreateParameters parms = new ServiceCertificateCreateParameters
+            {
+                CertificateFormat = CertificateFormat.Pfx,
+                Data = certBytes,
+                Password = r.createdeployment.Service.ServiceCertificatePassword
+            };
+
+            var client = new ComputeManagementClient(creds);
+            var resp = client.ServiceCertificates.Create(r.createdeployment.Service.ServiceName, parms);
+            
+            return resp.HttpStatusCode;            
         }
 
         public static bool CheckServiceNameAvailability(string serviceName, SubscriptionCloudCredentials creds)
@@ -118,15 +155,20 @@ namespace AzureTaskManager
         {
             try
             {
+                string configFile = storageObject.GetServiceConfigFile(sub.PackageStorageAcct, root.createdeployment.Package.ConfigFileName);
+                string label = root.createdeployment.Service.Label;
+                string name = root.createdeployment.Service.Label;
+                Uri packageUri = GetBlobUri(sub.PackageStorageAcct, sub.PackageContainerName, root.createdeployment.Package.PackageName);
+
                 using (var client = new ComputeManagementClient(creds))
                 {
                     OperationStatusResponse resp = client.Deployments.Create(root.createdeployment.Service.ServiceName, DeploymentSlot.Production,
                         new DeploymentCreateParameters
                         {
-                            Configuration = storageObject.GetServiceConfigFile(sub.PackageStorageAcct, root.createdeployment.Package.ConfigFileName),
-                            Label = root.createdeployment.Service.Label,
-                            Name = root.createdeployment.Service.Label,
-                            PackageUri = GetBlobUri(sub.PackageStorageAcct, sub.PackageContainerName, root.createdeployment.Package.PackageName),
+                            Configuration = configFile,
+                            Label = label,
+                            Name = name,
+                            PackageUri = packageUri,
                             StartDeployment = true,
                             TreatWarningsAsError = false
                         });

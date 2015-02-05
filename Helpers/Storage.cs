@@ -83,21 +83,21 @@ namespace Helpers
             
         }
 
-        public byte[] GetCertificateBytes(string certName)
+        public byte[] GetBlockBlobBytes(string blobName)
         {
-            byte[] certBytes;
+            byte[] blobBytes;
 
             try
             {
                 CloudStorageAccount acct = new CloudStorageAccount(StorageAccounts.Instance.Get("config").Credentials, true);
                 CloudBlobClient cbc = acct.CreateCloudBlobClient();
                 CloudBlobContainer container = cbc.GetContainerReference(StorageAccounts.Instance.Get("config").DefaultContainer);
-                CloudBlockBlob blob = container.GetBlockBlobReference(certName);
+                CloudBlockBlob blob = container.GetBlockBlobReference(blobName);
 
                 using (var memoryStream = new MemoryStream())
                 {
                     blob.DownloadToStream(memoryStream);
-                    certBytes = memoryStream.ToArray();
+                    blobBytes = memoryStream.ToArray();
                 }
             }
             catch (Exception ex) 
@@ -107,7 +107,7 @@ namespace Helpers
             }
 
             Console.WriteLine("Certificate file fetched ok.");
-            return certBytes;
+            return blobBytes;
         }
 
         public bool BlobExists(string acctName, string blobName)
@@ -116,15 +116,18 @@ namespace Helpers
             {
                 CloudStorageAccount acct = new CloudStorageAccount(StorageAccounts.Instance.Get(acctName).Credentials, true);
                 CloudBlobClient cbc = acct.CreateCloudBlobClient();
-                return cbc.GetContainerReference(StorageAccounts.Instance.Get(acctName).DefaultContainer)
-                    .GetBlockBlobReference(blobName)
-                    .Exists();
+                CloudBlobContainer container = cbc.GetContainerReference(StorageAccounts.Instance.Get(acctName).DefaultContainer);
+                CloudBlockBlob blob = container.GetBlockBlobReference(blobName);
+                bool blobExists = blob.Exists();
+                return blobExists;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error checking existence of blob {1}: {0}", ex.Message, blobName);
                 return false;
             }
+
+            
         }
 
         public string GetServiceConfigFile(string acctName, string blobName)
@@ -163,8 +166,8 @@ namespace Helpers
                 configFileBytes[configFileBytes.Length - 3] = 0x0D;
             }
 
-            
-            return Convert.ToString(configFileBytes);
+
+            return System.Text.Encoding.Default.GetString(configFileBytes);
 
         }
 

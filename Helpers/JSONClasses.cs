@@ -33,6 +33,10 @@ namespace Helpers
         public bool CreateServiceIfNotExist { get; set; }
         public string Location { get; set; }
         public string Slot { get; set; }
+        public bool UpdateIfAlreadyPresent { get; set; }
+        public string ServiceCertificate { get; set; }
+        public string ServiceCertificatePassword { get; set; }
+        public bool InstallCertificateIfNotPresent { get; set; }
     }
 
     public class JSONCreateDeployment
