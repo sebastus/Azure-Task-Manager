@@ -18,8 +18,7 @@ namespace AzureTaskManager
         {
             RootConfigurationObject atmConfiguration = null;
 
-            Storage storage = new Storage();
-            string configJSON = storage.GetConfigurationFile();
+            string configJSON = Storage.GetConfigurationFile();
             try
             {
                 atmConfiguration = JsonConvert.DeserializeObject<RootConfigurationObject>(configJSON);

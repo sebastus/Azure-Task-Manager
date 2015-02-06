@@ -54,13 +54,13 @@ namespace Helpers
 
     public class Storage
     {
-
-        public Storage() 
+        
+        public static Uri GetBlobUri(string storageAccountName, string containerName, string fileName)
         {
-
+            return new Uri(string.Format("http://{0}.blob.core.windows.net/{1}/{2}", storageAccountName, containerName, fileName));
         }
 
-        public string GetConfigurationFile()
+        public static string GetConfigurationFile()
         {
             string text;
 
@@ -83,7 +83,7 @@ namespace Helpers
             
         }
 
-        public byte[] GetBlockBlobBytes(string blobName)
+        public static byte[] GetBlockBlobBytes(string blobName)
         {
             byte[] blobBytes;
 
@@ -110,7 +110,7 @@ namespace Helpers
             return blobBytes;
         }
 
-        public bool BlobExists(string acctName, string blobName)
+        public static bool BlobExists(string acctName, string blobName)
         {
             try
             {
@@ -130,7 +130,7 @@ namespace Helpers
             
         }
 
-        public string GetServiceConfigFile(string acctName, string blobName)
+        public static string GetServiceConfigFile(string acctName, string blobName)
         {
             CloudBlockBlob c;
             try

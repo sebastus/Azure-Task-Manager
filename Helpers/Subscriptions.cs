@@ -44,8 +44,7 @@ namespace Helpers
         public void Add(JSONSubscription json) 
         {
             subscriptions.Add(json.SubscriptionName, new Subscription(json));
-            Storage s = new Storage();
-            byte[] certBytes = s.GetBlockBlobBytes(json.MgtCertFileName);
+            byte[] certBytes = Storage.GetBlockBlobBytes(json.MgtCertFileName);
             X509Certificate2 cert = new X509Certificate2(certBytes, json.MgtCertPassword, X509KeyStorageFlags.MachineKeySet);
             subscriptions[json.SubscriptionName].MgtCertificate = cert;
         }

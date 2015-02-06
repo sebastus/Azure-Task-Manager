@@ -13,9 +13,7 @@ namespace Helpers
 
         public void InitializeConfiguration()
         {
-            Storage s = new Storage();
-
-            var configString = s.GetConfigurationFile();
+            var configString = Storage.GetConfigurationFile();
 
             try
             {

@@ -1,13 +1,23 @@
-{"createdeployment": {
-	"SubscriptionName":"GOLIVE-Azure",
-	"Package":
-		{"PackageName":"AzureTableWCFDataService.Azure.cspkg", 
-		  "ConfigFileName":"ServiceConfiguration.Cloud.cscfg"},
-	"Service":
-		{"Label":"v1",
-		 "ServiceName":"golive-wcfdataservice",
-		 "CreateServiceIfNotExist":true,
-		 "Location":"West US",
-		 "Slot":"production"}
+{
+	"createdeployment": 
+	{
+		"SubscriptionName":"GOLIVE-Azure",
+		"Package":
+		{
+			"PackageName":"TestDeployment.cspkg", 
+			"ConfigFileName":"ServiceConfiguration.Cloud.cscfg"
+		},
+		"Service":
+		{
+			"Label":"v1",
+			"ServiceName":"golive-deploy01",
+			"CreateServiceIfNotExist":true,
+			"Location":"West US",
+			"Slot":"production",
+			"UpdateIfAlreadyPresent":true,
+			"ServiceCertificate":"TestSSLCert.pfx",
+			"ServiceCertificatePassword":"P3pperSalam8",
+			"InstallCertificateIfNotPresent":true
+		}
 	}
 }
