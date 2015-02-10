@@ -126,19 +126,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateDeploymentProcess.cs" />
+    <Compile Include="CreateVMProcess.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MyApp.config" />
+    <None Include="goliveApp.config" />
+    <None Include="SampleApp.config" />
     <None Include="App.config" />
     <None Include="config.json" />
     <None Include="goliveConfig.json" />
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\azuretaskmanager.pubxml" />
     <None Include="Properties\webjob-publish-settings.json" />
-    <None Include="sampleConfig.json" />
+    <None Include="SampleConfig.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Helpers\Helpers.csproj">

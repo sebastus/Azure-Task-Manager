@@ -23,7 +23,7 @@ namespace AzureTaskManager
             if (sub == null)
             {
                 string msg = string.Format("Subscription name {0} not found in configuration file.", r.createdeployment.SubscriptionName);
-                LogExit(msg, r.createdeployment.Service.ServiceName, log);
+                Common.LogExit(msg, r.createdeployment.Service.ServiceName, log);
                 return;
             }
 
@@ -31,13 +31,13 @@ namespace AzureTaskManager
             CertificateCloudCredentials creds = new CertificateCloudCredentials(sub.SubscriptionId, sub.MgtCertificate);
 
             // see if the cloud service already exists
-            bool nameIsAvailable = CheckServiceNameAvailability(r.createdeployment.Service.ServiceName, creds);
+            bool nameIsAvailable = Common.CheckServiceNameAvailability(r.createdeployment.Service.ServiceName, creds);
 
             // if not and create if not exists, create it.
             if (nameIsAvailable && r.createdeployment.Service.CreateServiceIfNotExist)
             {
                 log.WriteLine("Creating hosted service: {0}", r.createdeployment.Service.ServiceName);
-                HttpStatusCode code = CreateService(creds, r, sub, log);
+                HttpStatusCode code = Common.CreateService(creds, r, sub, log);
                 log.WriteLine("Code returned from CreateService: {0}", code.ToString());
             }
 
@@ -56,7 +56,7 @@ namespace AzureTaskManager
             if (!Storage.BlobExists(acctName, r.createdeployment.Package.ConfigFileName))
             {
                 string msg = string.Format("Service configuration file {0} does not exist", r.createdeployment.Package.ConfigFileName);
-                LogExit(msg, r.createdeployment.Service.ServiceName, log);
+                Common.LogExit(msg, r.createdeployment.Service.ServiceName, log);
                 return;
             }
 
@@ -64,7 +64,7 @@ namespace AzureTaskManager
             if (!Storage.BlobExists(acctName, r.createdeployment.Package.PackageName))
             {
                 string msg = string.Format("Service package file {0} does not exist", r.createdeployment.Package.PackageName);
-                LogExit(msg, r.createdeployment.Service.ServiceName, log);
+                Common.LogExit(msg, r.createdeployment.Service.ServiceName, log);
                 return;
             }
 
@@ -73,13 +73,13 @@ namespace AzureTaskManager
             if (string.IsNullOrEmpty(requestId))
             {
                 string msg = string.Format("Deployment of service {0} did not succeed.", r.createdeployment.Service.ServiceName);
-                LogExit(msg, r.createdeployment.Service.ServiceName, log);
+                Common.LogExit(msg, r.createdeployment.Service.ServiceName, log);
                 return;
             }
             else
             {
                 string msg = string.Format("Deployment of service {0} succeeded with request ID: {1}.", r.createdeployment.Service.ServiceName, requestId);
-                LogExit(msg, r.createdeployment.Service.ServiceName, log);
+                Common.LogExit(msg, r.createdeployment.Service.ServiceName, log);
                 return;
             }
 
@@ -103,38 +103,7 @@ namespace AzureTaskManager
             return resp.HttpStatusCode;
         }
 
-        public static bool CheckServiceNameAvailability(string serviceName, SubscriptionCloudCredentials creds)
-        {
-            using (var client = new ComputeManagementClient(creds))
-            {
-                HostedServiceCheckNameAvailabilityResponse resp = client.HostedServices.CheckNameAvailability(serviceName);
-                return resp.IsAvailable;
-            }
-        }
-
-        public static HttpStatusCode CreateService(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)
-        {
-            try
-            {
-                using (var client = new ComputeManagementClient(creds))
-                {
-                    var resp = client.HostedServices.Create(new HostedServiceCreateParameters
-                    {
-                        Label = sub.PackageStorageAcct,
-                        Location = root.createdeployment.Service.Location,
-                        ServiceName = root.createdeployment.Service.ServiceName
-                    });
-                    return resp.StatusCode;
-                }
-            }
-            catch (Exception ex)
-            {
-                string msg = string.Format("Exception creating cloud service: {0}", ex.Message);
-                LogExit(msg, root.createdeployment.Service.ServiceName, log);
-                return HttpStatusCode.BadRequest;
-            }
-        }
-
+        
         public static string CreateDeployment(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)
         {
             try
@@ -163,15 +132,11 @@ namespace AzureTaskManager
             {
                 // get a 404 if the cloud service doesn't exist
                 string msg = string.Format("Exception creating deployment: {0}", ex.Message);
-                LogExit(msg, root.createdeployment.Service.ServiceName, log);
+                Common.LogExit(msg, root.createdeployment.Service.ServiceName, log);
                 return null;
             }
         }
 
-        private static void LogExit(string message, string serviceName, TextWriter log)
-        {
-            log.WriteLine(message);
-            Console.WriteLine("Command to deploy service {0} failed, check log for details.", serviceName);
-        }
+        
     }
 }

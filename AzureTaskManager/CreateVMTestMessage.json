@@ -1,0 +1,12 @@
+{
+	"createvm": 
+	{
+		"SubscriptionName":"GOLIVE-Azure",
+		"VM":
+		{
+			"ServiceName":"golive-deploy01",
+			"CreateServiceIfNotExist":true,
+			"Location":"West US",
+		}
+	}
+}

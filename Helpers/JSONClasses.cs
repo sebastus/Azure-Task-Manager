@@ -20,6 +20,9 @@ namespace Helpers
     }
 
 
+    /// <summary>
+    /// Create Deployment classes
+    /// </summary>
     public class JSONCreateDeploymentPackage
     {
         public string PackageName { get; set; }
@@ -49,5 +52,26 @@ namespace Helpers
     public class RootCreateDeploymentObject
     {
         public JSONCreateDeployment createdeployment { get; set; }
+    }
+
+    /// <summary>
+    /// Create VM classes
+    /// </summary>
+    public class VM
+    {
+        public string ServiceName { get; set; }
+        public bool CreateServiceIfNotExist { get; set; }
+        public string Location { get; set; }
+    }
+
+    public class CreateVM
+    {
+        public string SubscriptionName { get; set; }
+        public VM VM { get; set; }
+    }
+
+    public class RootCreateVMObject
+    {
+        public CreateVM createvm { get; set; }
     }
 }
