@@ -68,8 +68,17 @@ namespace AzureTaskManager
                 return;
             }
 
-            // create the deployment
-            string requestId = CreateDeployment(creds, r, sub, log);
+            // create or update the deployment   (TODO: add code to check if service already occupied)
+            string requestId = null;
+            if (r.createdeployment.Service.UpdateIfAlreadyPresent && DeploymentExists(creds, r, sub, log))
+            {
+                requestId = UpdateDeployment(creds, r, sub, log);
+            }
+            else
+            {
+                requestId = CreateDeployment(creds, r, sub, log);
+            }
+
             if (string.IsNullOrEmpty(requestId))
             {
                 string msg = string.Format("Deployment of service {0} did not succeed.", r.createdeployment.Service.ServiceName);
@@ -79,7 +88,7 @@ namespace AzureTaskManager
             else
             {
                 string msg = string.Format("Deployment of service {0} succeeded with request ID: {1}.", r.createdeployment.Service.ServiceName, requestId);
-                Common.LogExit(msg, r.createdeployment.Service.ServiceName, log);
+                Common.LogSuccess(msg, r.createdeployment.Service.ServiceName, log);
                 return;
             }
 
@@ -103,7 +112,66 @@ namespace AzureTaskManager
             return resp.HttpStatusCode;
         }
 
-        
+        public static bool DeploymentExists(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)
+        {
+            DeploymentGetResponse resp = null;
+            try
+            {
+                using (var client = new ComputeManagementClient(creds))
+                {
+                    resp = client.Deployments.GetBySlot(
+                        root.createdeployment.Service.ServiceName,
+                        (DeploymentSlot) Enum.Parse(typeof(DeploymentSlot), root.createdeployment.Service.Slot));     
+                }
+            }
+            catch (CloudException ce)
+            {
+                log.WriteLine("Resource not found: {0} deployment does not exist for service {1}.", root.createdeployment.Service.Slot, root.createdeployment.Service.ServiceName);
+                log.WriteLine("ErrorCode: {0}, Response.StatusCode: {1}", ce.ErrorCode, ce.Response.StatusCode);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                string msg = string.Format("Exception {1} getting deployment: {0}", ex.Message, ex.ToString());
+                Common.LogExit(msg, root.createdeployment.Service.ServiceName, log);
+                return false;
+            }
+
+            return true;
+        }
+
+        public static string UpdateDeployment(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)
+        {
+            try
+            {
+                string configFile = Storage.GetServiceConfigFile(sub.PackageStorageAcct, root.createdeployment.Package.ConfigFileName);
+                string label = root.createdeployment.Service.Label;
+                string name = root.createdeployment.Service.Label;
+                Uri packageUri = Storage.GetBlobUri(sub.PackageStorageAcct, sub.PackageContainerName, root.createdeployment.Package.PackageName);
+
+                using (var client = new ComputeManagementClient(creds))
+                {
+                    OperationStatusResponse resp = client.Deployments.UpgradeBySlot(root.createdeployment.Service.ServiceName,
+                        (DeploymentSlot)Enum.Parse(typeof(DeploymentSlot), root.createdeployment.Service.Slot),
+                        new DeploymentUpgradeParameters
+                        {
+                            Configuration = configFile,
+                            Force = false,
+                            Label = label,
+                            Mode = DeploymentUpgradeMode.Auto,
+                            PackageUri = packageUri
+                        });
+                    return resp.RequestId;
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = string.Format("Exception updating deployment: {0}", ex.Message);
+                Common.LogExit(msg, root.createdeployment.Service.ServiceName, log);
+                return null;
+            }
+        }
+
         public static string CreateDeployment(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)
         {
             try

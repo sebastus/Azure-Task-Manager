@@ -13,7 +13,7 @@
 			"ServiceName":"golive-deploy01",
 			"CreateServiceIfNotExist":true,
 			"Location":"West US",
-			"Slot":"production",
+			"Slot":"Production",
 			"UpdateIfAlreadyPresent":true,
 			"ServiceCertificate":"TestSSLCert.pfx",
 			"ServiceCertificatePassword":"P3pperSalam8",

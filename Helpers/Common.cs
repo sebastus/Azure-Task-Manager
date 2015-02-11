@@ -25,6 +25,12 @@ namespace Helpers
             Console.WriteLine("Command to deploy service {0} failed, check log for details.", serviceName);
         }
 
+        public static void LogSuccess(string message, string serviceName, TextWriter log)
+        {
+            log.WriteLine(message);
+            Console.WriteLine("Command to deploy service {0} succeeded, check log for details.", serviceName);
+        }
+
         public static HttpStatusCode CreateService(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)
         {
             try
