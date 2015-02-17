@@ -114,7 +114,7 @@ namespace AzureTaskManager
             return resp.HttpStatusCode;
         }
 
-        public static bool DeploymentExists(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)
+        private static bool DeploymentExists(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)
         {
             DeploymentGetResponse resp = null;
             try
@@ -142,7 +142,7 @@ namespace AzureTaskManager
             return true;
         }
 
-        public static string UpdateDeployment(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)
+        private static string UpdateDeployment(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)
         {
             try
             {
@@ -174,7 +174,7 @@ namespace AzureTaskManager
             }
         }
 
-        public static string CreateDeployment(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)
+        private static string CreateDeployment(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)
         {
             try
             {

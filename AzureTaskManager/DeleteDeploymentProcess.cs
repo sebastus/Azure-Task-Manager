@@ -76,7 +76,7 @@ namespace AzureTaskManager
             }
         }
 
-        public static bool DeploymentExists(SubscriptionCloudCredentials creds, RootDeleteDeploymentObject root, Subscription sub, TextWriter log)
+        private static bool DeploymentExists(SubscriptionCloudCredentials creds, RootDeleteDeploymentObject root, Subscription sub, TextWriter log)
         {
             DeploymentGetResponse resp = null;
             try
@@ -104,7 +104,7 @@ namespace AzureTaskManager
             return true;
         }
 
-        public static string DeleteDeployment(SubscriptionCloudCredentials creds, RootDeleteDeploymentObject root, Subscription sub, TextWriter log)
+        private static string DeleteDeployment(SubscriptionCloudCredentials creds, RootDeleteDeploymentObject root, Subscription sub, TextWriter log)
         {
             try
             {

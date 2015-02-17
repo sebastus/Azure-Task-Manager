@@ -128,6 +128,7 @@
     <Compile Include="CreateDeploymentProcess.cs" />
     <Compile Include="CreateVMProcess.cs" />
     <Compile Include="DeleteDeploymentProcess.cs" />
+    <Compile Include="DeleteServiceProcess.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

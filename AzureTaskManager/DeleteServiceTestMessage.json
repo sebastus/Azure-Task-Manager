@@ -1,0 +1,11 @@
+{
+	"deleteservice": 
+	{
+		"SubscriptionName":"GOLIVE-Azure",
+		"Service":
+		{
+			"ServiceName":"golive-deploy01",
+			"ConfirmDeleteIfOccupied":true
+		}
+	}
+}

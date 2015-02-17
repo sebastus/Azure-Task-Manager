@@ -61,7 +61,7 @@ namespace AzureTaskManager
             }
         }
 
-        public static string CreateVM(SubscriptionCloudCredentials creds, RootCreateVMObject root, Subscription sub, TextWriter log)
+        private static string CreateVM(SubscriptionCloudCredentials creds, RootCreateVMObject root, Subscription sub, TextWriter log)
         {
             InputEndpoint rdEndpoint = new InputEndpoint();
             rdEndpoint.EnableDirectServerReturn = false;

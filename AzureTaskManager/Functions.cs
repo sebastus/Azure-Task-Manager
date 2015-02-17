@@ -27,5 +27,10 @@ namespace AzureTaskManager
             DeleteDeploymentProcess.DeleteDeploymentSteps(message, log);
         }
 
+        public static void ProcessDeleteServiceMessage([QueueTrigger("deleteservice")] string message, TextWriter log)
+        {
+            DeleteServiceProcess.DeleteServiceSteps(message, log);
+        }
+
     }
 }

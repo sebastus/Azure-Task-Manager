@@ -59,7 +59,7 @@ namespace AzureTaskManager
             }
         }
 
-        public static string ShutdownVMs(SubscriptionCloudCredentials creds, RootShutdownVMsObject root, Subscription sub, TextWriter log)
+        private static string ShutdownVMs(SubscriptionCloudCredentials creds, RootShutdownVMsObject root, Subscription sub, TextWriter log)
         {
             List<string> roles = new List<string>();
             foreach (JSONShutdownVMsVM vm in root.shutdownvms.VM)

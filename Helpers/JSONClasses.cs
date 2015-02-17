@@ -40,6 +40,26 @@ namespace Helpers
     }
 
     /// <summary>
+    /// DeleteService classes
+    /// </summary>
+    public class JSONDeleteServiceService
+    {
+        public string ServiceName { get; set; }
+        public bool ConfirmDeleteIfOccupied { get; set; }
+    }
+
+    public class JSONDeleteService
+    {
+        public string SubscriptionName { get; set; }
+        public JSONDeleteServiceService Service { get; set; }
+    }
+
+    public class RootDeleteServiceObject
+    {
+        public JSONDeleteService deleteservice { get; set; }
+    }
+
+    /// <summary>
     /// Create PaaS Deployment classes (web role, worker role)
     /// </summary>
     public class JSONCreateDeploymentPackage
