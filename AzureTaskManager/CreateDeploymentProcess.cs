@@ -68,7 +68,7 @@ namespace AzureTaskManager
                 return;
             }
 
-            // create or update the deployment   (TODO: add code to check if service already occupied)
+            // create or update the deployment 
             string requestId = null;
             if (r.createdeployment.Service.UpdateIfAlreadyPresent && DeploymentExists(creds, r, sub, log))
             {
@@ -82,13 +82,15 @@ namespace AzureTaskManager
             if (string.IsNullOrEmpty(requestId))
             {
                 string msg = string.Format("Deployment of service {0} did not succeed.", r.createdeployment.Service.ServiceName);
-                Common.LogExit(msg, r.createdeployment.Service.ServiceName, log);
+                string consoleMsg = string.Format("Deployment of service {0} failed.  Check the log for details.", r.createdeployment.Service.ServiceName);
+                Common.LogExit(msg, consoleMsg, r.createdeployment.Service.ServiceName, log);
                 return;
             }
             else
             {
                 string msg = string.Format("Deployment of service {0} succeeded with request ID: {1}.", r.createdeployment.Service.ServiceName, requestId);
-                Common.LogSuccess(msg, r.createdeployment.Service.ServiceName, log);
+                string consoleMsg = string.Format("Deployment of service {0} failed.  Check the log for details.", r.createdeployment.Service.ServiceName);
+                Common.LogSuccess(msg, consoleMsg, r.createdeployment.Service.ServiceName, log);
                 return;
             }
 

@@ -5,7 +5,7 @@
 		"Service":
 		{
 			"ServiceName":"golive-deploy01",
-			"DeploymentName":"golive-deploy01-name",
+			"DeploymentName":"golive-deploy01-name"
 		},
 		"VM":
 		[

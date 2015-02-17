@@ -45,14 +45,16 @@ namespace AzureTaskManager
 
             if (string.IsNullOrEmpty(requestId))
             {
-                string msg = string.Format("Deletion of VMs on service {0} did not succeed.", r.shutdownvms.Service.ServiceName);
-                Common.LogExit(msg, r.shutdownvms.Service.ServiceName, log);
+                string msg = string.Format("Shutdown of VMs on service {0} did not succeed.", r.shutdownvms.Service.ServiceName);
+                string consoleMsg = string.Format("Shutdown of VMs on service {0} failed.  Check the log for details.", r.shutdownvms.Service.ServiceName);
+                Common.LogExit(msg, consoleMsg, r.shutdownvms.Service.ServiceName, log);
                 return;
             }
             else
             {
-                string msg = string.Format("Deletion of VMs on service {0} succeeded with request ID: {1}.", r.shutdownvms.Service.ServiceName, requestId);
-                Common.LogSuccess(msg, r.shutdownvms.Service.ServiceName, log);
+                string msg = string.Format("Shutdown of VMs on service {0} succeeded with request ID: {1}.", r.shutdownvms.Service.ServiceName, requestId);
+                string consoleMsg = string.Format("Shutdown of VMs on service {0} succeeded.  Check the log for details.", r.shutdownvms.Service.ServiceName);
+                Common.LogSuccess(msg, consoleMsg, r.shutdownvms.Service.ServiceName, log);
                 return;
             }
         }

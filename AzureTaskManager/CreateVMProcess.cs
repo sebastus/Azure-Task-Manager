@@ -48,13 +48,15 @@ namespace AzureTaskManager
             if (string.IsNullOrEmpty(requestId))
             {
                 string msg = string.Format("Creation of VM on service {0} did not succeed.", r.createvm.Service.ServiceName);
-                Common.LogExit(msg, r.createvm.Service.ServiceName, log);
+                string consoleMsg = string.Format("Creation of VM on service {0} failed.  Check the log for details.", r.createvm.Service.ServiceName);
+                Common.LogExit(msg, consoleMsg, r.createvm.Service.ServiceName, log);
                 return;
             }
             else
             {
                 string msg = string.Format("Creation of VM on service {0} succeeded with request ID: {1}.", r.createvm.Service.ServiceName, requestId);
-                Common.LogSuccess(msg, r.createvm.Service.ServiceName, log);
+                string consoleMsg = string.Format("Creation of VM on service {0} succeeded.  Check the log for details.", r.createvm.Service.ServiceName);
+                Common.LogSuccess(msg, consoleMsg, r.createvm.Service.ServiceName, log);
                 return;
             }
         }

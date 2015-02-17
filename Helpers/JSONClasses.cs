@@ -13,12 +13,31 @@ namespace Helpers
         public string PackageStorageKey { get; set; }
         public string PackageContainerName { get; set; }
     }
-
+    
     public class RootConfigurationObject
     {
         public List<JSONSubscription> Subscriptions { get; set; }
     }
 
+    /// <summary>
+    /// DeleteDeployment classes
+    /// </summary>
+    public class JSONDeleteDeploymentService
+    {
+        public string ServiceName { get; set; }
+        public string Slot { get; set; }
+    }
+
+    public class JSONDeleteDeployment
+    {
+        public string SubscriptionName { get; set; }
+        public JSONDeleteDeploymentService Service { get; set; }
+    }
+
+    public class RootDeleteDeploymentObject
+    {
+        public JSONDeleteDeployment deletedeployment { get; set; }
+    }
 
     /// <summary>
     /// Create PaaS Deployment classes (web role, worker role)

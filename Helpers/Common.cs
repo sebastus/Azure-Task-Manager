@@ -19,16 +19,22 @@ namespace Helpers
             }
         }
 
+        public static void LogExit(string message, string consoleMessage, string serviceName, TextWriter log)
+        {
+            log.WriteLine(message);
+            Console.WriteLine(consoleMessage);
+        }
+
         public static void LogExit(string message, string serviceName, TextWriter log)
         {
             log.WriteLine(message);
-            Console.WriteLine("Command to deploy service {0} failed, check log for details.", serviceName);
+            Console.WriteLine("Operation failed.  Check the log for details.");
         }
 
-        public static void LogSuccess(string message, string serviceName, TextWriter log)
+        public static void LogSuccess(string message, string consoleMessage, string serviceName, TextWriter log)
         {
             log.WriteLine(message);
-            Console.WriteLine("Command to deploy service {0} succeeded, check log for details.", serviceName);
+            Console.WriteLine(consoleMessage);
         }
 
         public static HttpStatusCode CreateService(SubscriptionCloudCredentials creds, RootCreateDeploymentObject root, Subscription sub, TextWriter log)

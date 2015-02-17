@@ -22,5 +22,10 @@ namespace AzureTaskManager
             ShutdownVMsProcess.ShutdownVMsSteps(message, log);
         }
 
+        public static void ProcessDeleteDeploymentMessage([QueueTrigger("deletedeployment")] string message, TextWriter log)
+        {
+            DeleteDeploymentProcess.DeleteDeploymentSteps(message, log);
+        }
+
     }
 }
