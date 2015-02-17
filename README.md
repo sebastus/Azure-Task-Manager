@@ -34,6 +34,8 @@ Functions available in ATM:
 *	CreateDeployment (cloud service/webrole/worker role)
 *	CreateDeployment (VM)
 *	ShutdownRole  (shutdown a VM)
+*	DeleteDeployment (delete production or staging deployment of web/worker, any VMs)
+*	DeleteService (delete a cloud service, confirm to delete if any deployments present)
 
 Operation:
 
