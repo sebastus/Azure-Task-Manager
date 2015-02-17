@@ -1,0 +1,18 @@
+{
+	"shutdownvms": 
+	{
+		"SubscriptionName":"GOLIVE-Azure",
+		"Service":
+		{
+			"ServiceName":"golive-deploy01",
+			"DeploymentName":"golive-deploy01-name",
+		},
+		"VM":
+		[
+			{
+				"Name":"golive-vm001"
+			}
+		],
+		"PostShutDownAction":"StoppedDeallocated"
+	}
+}

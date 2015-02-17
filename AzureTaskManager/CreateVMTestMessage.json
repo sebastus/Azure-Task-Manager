@@ -2,11 +2,31 @@
 	"createvm": 
 	{
 		"SubscriptionName":"GOLIVE-Azure",
-		"VM":
+		"Service":
 		{
 			"ServiceName":"golive-deploy01",
+			"DeploymentName":"golive-deploy01-deployment",
 			"CreateServiceIfNotExist":true,
-			"Location":"West US",
-		}
+			"Location":"West US"
+		},
+		"VM":
+		[
+			{
+				"Name":"golive-vm001",
+				"Size":"Small",
+				"ConfigurationSet":
+				{
+					"AdminUserName":"greg",
+					"AdminPassword":"P3pperSalam8",
+					"ComputerName":"golive-vm001"
+				},
+				"OSVirtualHardDisk":
+				{
+					"SourceImageName":"a699494373c04fc0bc8f2bb1389d6106__Windows-Server-2012-R2-201412.01-en.us-127GB.vhd",
+					"StorageAccount":"goliveazurewest",
+					"Container":"vhds"					
+				}
+			}
+		]
 	}
 }

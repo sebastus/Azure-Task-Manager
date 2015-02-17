@@ -17,5 +17,10 @@ namespace AzureTaskManager
             CreateVMProcess.CreateVMSteps(message, log);
         }
 
+        public static void ProcessShutdownVMsMessage([QueueTrigger("shutdownvms")] string message, TextWriter log)
+        {
+            ShutdownVMsProcess.ShutdownVMsSteps(message, log);
+        }
+
     }
 }

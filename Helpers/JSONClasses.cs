@@ -21,7 +21,7 @@ namespace Helpers
 
 
     /// <summary>
-    /// Create Deployment classes
+    /// Create PaaS Deployment classes (web role, worker role)
     /// </summary>
     public class JSONCreateDeploymentPackage
     {
@@ -57,21 +57,73 @@ namespace Helpers
     /// <summary>
     /// Create VM classes
     /// </summary>
-    public class VM
+    public class JSONVMService
     {
         public string ServiceName { get; set; }
+        public string DeploymentName { get; set; }
         public bool CreateServiceIfNotExist { get; set; }
         public string Location { get; set; }
     }
 
-    public class CreateVM
+    public class JSONConfigurationSet
+    {
+        public string AdminUserName { get; set; }
+        public string AdminPassword { get; set; }
+        public string ComputerName { get; set; }
+    }
+
+    public class JSONOSVirtualHardDisk
+    {
+        public string SourceImageName { get; set; }
+        public string StorageAccount { get; set; }
+        public string Container { get; set; }
+    }
+
+    public class JSONVM
+    {
+        public string Name { get; set; }
+        public string Size { get; set; }
+        public JSONConfigurationSet ConfigurationSet { get; set; }
+        public JSONOSVirtualHardDisk OSVirtualHardDisk { get; set; }
+    }
+
+    public class JSONCreateVM
     {
         public string SubscriptionName { get; set; }
-        public VM VM { get; set; }
+        public JSONVMService Service { get; set; }
+        public List<JSONVM> VM { get; set; }
     }
 
     public class RootCreateVMObject
     {
-        public CreateVM createvm { get; set; }
+        public JSONCreateVM createvm { get; set; }
+    }
+
+
+    /// <summary>
+    /// Classes for shutting down a set of VMs in the same cloud service (deployment)
+    /// </summary>
+    public class JSONShutdownVMsService
+    {
+        public string ServiceName { get; set; }
+        public string DeploymentName { get; set; }
+    }
+
+    public class JSONShutdownVMsVM
+    {
+        public string Name { get; set; }
+    }
+
+    public class JSONShutdownvms
+    {
+        public string SubscriptionName { get; set; }
+        public JSONShutdownVMsService Service { get; set; }
+        public List<JSONShutdownVMsVM> VM { get; set; }
+        public string PostShutDownAction { get; set; }
+    }
+
+    public class RootShutdownVMsObject
+    {
+        public JSONShutdownvms shutdownvms { get; set; }
     }
 }

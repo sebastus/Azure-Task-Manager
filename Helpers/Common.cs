@@ -63,8 +63,8 @@ namespace Helpers
                     var resp = client.HostedServices.Create(new HostedServiceCreateParameters
                     {
                         Label = sub.PackageStorageAcct,
-                        Location = root.createvm.VM.Location,
-                        ServiceName = root.createvm.VM.ServiceName
+                        Location = root.createvm.Service.Location,
+                        ServiceName = root.createvm.Service.ServiceName
                     });
                     return resp.StatusCode;
                 }
@@ -72,7 +72,7 @@ namespace Helpers
             catch (Exception ex)
             {
                 string msg = string.Format("Exception creating cloud service: {0}", ex.Message);
-                LogExit(msg, root.createvm.VM.ServiceName, log);
+                LogExit(msg, root.createvm.Service.ServiceName, log);
                 return HttpStatusCode.BadRequest;
             }
         }
