@@ -1,5 +1,5 @@
 {
-	"shutdownvms": 
+	"startvms": 
 	{
 		"SubscriptionName":"GOLIVE-Azure",
 		"Service":
@@ -12,7 +12,6 @@
 			{
 				"Name":"golive-vm001"
 			}
-		],
-		"PostShutDownAction":"StoppedDeallocated"
+		]
 	}
 }

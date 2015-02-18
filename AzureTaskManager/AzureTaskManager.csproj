@@ -133,6 +133,7 @@
     <Compile Include="Functions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShutdownVMsProcess.cs" />
+    <Compile Include="StartRolesProcess.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="goliveApp.config" />

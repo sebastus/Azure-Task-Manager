@@ -153,7 +153,7 @@ namespace Helpers
         public string Name { get; set; }
     }
 
-    public class JSONShutdownvms
+    public class JSONShutdownVMs
     {
         public string SubscriptionName { get; set; }
         public JSONShutdownVMsService Service { get; set; }
@@ -163,6 +163,33 @@ namespace Helpers
 
     public class RootShutdownVMsObject
     {
-        public JSONShutdownvms shutdownvms { get; set; }
+        public JSONShutdownVMs shutdownvms { get; set; }
+    }
+
+    /// <summary>
+    /// Classes for shutting down a set of VMs in the same cloud service (deployment)
+    /// </summary>
+    public class JSONStartVMsService
+    {
+        public string ServiceName { get; set; }
+        public string DeploymentName { get; set; }
+    }
+
+    public class JSONStartVMsVM
+    {
+        public string Name { get; set; }
+    }
+
+    public class JSONStartVMs
+    {
+        public string SubscriptionName { get; set; }
+        public JSONStartVMsService Service { get; set; }
+        public List<JSONStartVMsVM> VM { get; set; }
+        public string PostStartAction { get; set; }
+    }
+
+    public class RootStartVMsObject
+    {
+        public JSONStartVMs startvms { get; set; }
     }
 }

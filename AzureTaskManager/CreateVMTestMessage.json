@@ -4,8 +4,8 @@
 		"SubscriptionName":"GOLIVE-Azure",
 		"Service":
 		{
-			"ServiceName":"golive-deploy01",
-			"DeploymentName":"golive-deploy01-deployment",
+			"ServiceName":"golive-test01",
+			"DeploymentName":"golive-test01-deployment",
 			"CreateServiceIfNotExist":true,
 			"Location":"West US"
 		},
