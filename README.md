@@ -1,5 +1,10 @@
 # Azure-Task-Manager
-Microsoft Azure Task Manager, executes tasks on your Azure assets singly or in bulk.  Core use case: spin up and tear down large environments very quickly.
+Microsoft Azure Task Manager, executes tasks on your Azure assets singly or in bulk.  
+
+Core use cases: 
+*	spin up and tear down large environments very quickly.
+*	same techniques apply to test rigs (test agents)
+*	even small environments can benefit from scheduled deploy/tear down
 
 It costs roughly $60/month (at retail) to operate a single core VM 24x7 on Microsoft Azure.  If you have (like one of my customers) 50 interlocking web roles and dev/test/qa environments, the monthly spend piles up pretty quickly.  If some of those cores are only used 8 hours per day, why not shut them down?  It's a trade off between the cost of the time to start them up and shut them down every day and the convenience & cost of just leaving them running all night.
 
