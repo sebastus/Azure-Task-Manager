@@ -43,7 +43,17 @@ namespace AzureTaskManager
                 log.WriteLine("Code returned from CreateService: {0}", code.ToString());
             }
 
-            string requestId = CreateVM(creds, r, sub, log);
+            bool deploymentExists = DeploymentExists(creds, r, sub, log);
+            string requestId = null;
+
+            if (deploymentExists)
+            {
+                requestId = CreateVM(creds, r, sub, log);
+            }
+            else
+            {
+                requestId = CreateDeployment(creds, r, sub, log);
+            }
 
             if (string.IsNullOrEmpty(requestId))
             {
@@ -61,7 +71,7 @@ namespace AzureTaskManager
             }
         }
 
-        private static string CreateVM(SubscriptionCloudCredentials creds, RootCreateVMObject root, Subscription sub, TextWriter log)
+        private static string CreateDeployment(SubscriptionCloudCredentials creds, RootCreateVMObject root, Subscription sub, TextWriter log)
         {
             InputEndpoint rdEndpoint = new InputEndpoint();
             rdEndpoint.EnableDirectServerReturn = false;
@@ -130,5 +140,92 @@ namespace AzureTaskManager
             }
 
         }
+
+        private static string CreateVM(SubscriptionCloudCredentials creds, RootCreateVMObject root, Subscription sub, TextWriter log)
+        {
+            InputEndpoint rdEndpoint = new InputEndpoint();
+            rdEndpoint.EnableDirectServerReturn = false;
+            rdEndpoint.EndpointAcl = null;
+            rdEndpoint.LocalPort = 3389;
+            rdEndpoint.Port = 3389;
+            rdEndpoint.Name = "RD";
+            rdEndpoint.Protocol = "TCP";
+
+            ConfigurationSet set = new ConfigurationSet();
+            set.AdminPassword = root.createvm.VM[0].ConfigurationSet.AdminPassword;
+            set.AdminUserName = root.createvm.VM[0].ConfigurationSet.AdminUserName;
+            set.ComputerName = root.createvm.VM[0].ConfigurationSet.ComputerName;  // Host Name in portal
+            set.ConfigurationSetType = ConfigurationSetTypes.WindowsProvisioningConfiguration;
+            set.ResetPasswordOnFirstLogon = false;
+
+            List<ConfigurationSet> sets = new List<ConfigurationSet>();
+            sets.Add(set);
+
+            OSVirtualHardDisk disk = new OSVirtualHardDisk();
+            disk.HostCaching = VirtualHardDiskHostCaching.ReadWrite;
+            disk.Label = "osdisk";
+            disk.SourceImageName = root.createvm.VM[0].OSVirtualHardDisk.SourceImageName;
+            string mediaLink = string.Format("https://{0}.blob.core.windows.net/{1}/{2}-{3}-osdisk.vhd",
+                root.createvm.VM[0].OSVirtualHardDisk.StorageAccount,
+                root.createvm.VM[0].OSVirtualHardDisk.Container,
+                root.createvm.Service.ServiceName,
+                root.createvm.VM[0].ConfigurationSet.ComputerName);
+            disk.MediaLink = new Uri(mediaLink);
+
+            try
+            {
+                using (var client = new ComputeManagementClient(creds))
+                {
+                    OperationStatusResponse resp = client.VirtualMachines.Create(
+                        root.createvm.Service.ServiceName,
+                        root.createvm.Service.DeploymentName,
+                        new VirtualMachineCreateParameters
+                        {
+                            ConfigurationSets = sets,
+                            OSVirtualHardDisk = disk,
+                            RoleName = root.createvm.VM[0].Name, // this goes into the name of the status file for the VHD, it's also used for future operations on this VM
+                            RoleSize = root.createvm.VM[0].Size
+                        });
+                    return resp.RequestId;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // get a 404 if the cloud service doesn't exist
+                string msg = string.Format("Exception creating VM: {0}", ex.Message);
+                Common.LogExit(msg, root.createvm.Service.ServiceName, log);
+                return null;
+            }
+
+        }
+        private static bool DeploymentExists(SubscriptionCloudCredentials creds, RootCreateVMObject root, Subscription sub, TextWriter log)
+        {
+            DeploymentGetResponse resp = null;
+            try
+            {
+                using (var client = new ComputeManagementClient(creds))
+                {
+                    resp = client.Deployments.GetByName(
+                        root.createvm.Service.ServiceName,
+                        root.createvm.Service.DeploymentName);
+                }
+            }
+            catch (CloudException ce)
+            {
+                log.WriteLine("Resource not found: {0} deployment does not exist for service {1}.", root.createvm.Service.DeploymentName, root.createvm.Service.ServiceName);
+                log.WriteLine("ErrorCode: {0}, Response.StatusCode: {1}", ce.ErrorCode, ce.Response.StatusCode);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                string msg = string.Format("Exception {1} getting deployment: {0}", ex.Message, ex.ToString());
+                Common.LogExit(msg, root.createvm.Service.ServiceName, log);
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }
