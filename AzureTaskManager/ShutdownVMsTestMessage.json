@@ -11,6 +11,18 @@
 		[
 			{
 				"Name":"golive-vm001"
+			},
+			{
+				"Name":"golive-vm002"
+			},
+			{
+				"Name":"golive-vm003"
+			},
+			{
+				"Name":"golive-vm004"
+			},
+			{
+				"Name":"golive-vm006"
 			}
 		],
 		"PostShutDownAction":"StoppedDeallocated"

@@ -12,13 +12,24 @@ There is a way to capture both convenience and lower cost.  Through the use of a
 
 Set Up:
 
-The system is implemented as an Azure Webjob.  Webjobs requires a storage account for its own needs, plus the dashboard.  ATM also requires a storage account for a few items.
+The system is implemented as an Azure Webjob.  Webjobs are contained or hosted within an Azure Website.  Create an Azure Website.
 
-*	Configuration of subscriptions & default storage account per subscription (JSON)
-*	Management certificates for managed subscriptions (one each, PFX format with private key)
-*	A set of Azure Storage Queues
+Webjobs (in general) require a storage account for their own needs (referred to as AzureWebJobsStorage in the app.config), plus one for the dashboard data (referred to as AzureWebJobsDashboard in app.config).  Create a storage account for each and put the connection strings into app.config in the designated locations.  In the configuration page of the Azure Website that will host the webjob, add Connection Strings - one for each storage account.
 
-Open the solution in Visual Studio 2013, Update 4.  Azure SDK 2.5.  Deploy as Webjob.  Ensure that your webjob storage account is configured properly in the website connection strings section.  If it is not, you'll get a warning in the webjob dashboard.
+ATM also requires a storage account for a few items.  These items go into the storage account referred to as AzureWebJobsStorage in app.config.  You must create a container named 'atmconfiguration' in the blob storage of that storage account.  Into that container place the following files:
+
+*	Configuration of subscriptions & default storage account per subscription (config.json)
+*	Management certificates for managed subscriptions (one each, PFX format with private key, for example myssl.pfx)
+
+In that same storage account, create a set of Azure Storage Queues:
+*	createdeployment
+*	createvm
+*	startvms
+*	shutdownvms
+*	deletedeployment
+*	deleteservice
+
+Open the solution in Visual Studio 2013, Update 4.  Azure SDK 2.5.  Deploy as Webjob.
 
 Here is a sample configuration file:
 
@@ -46,6 +57,6 @@ Functions available in ATM:
 
 Operation:
 
-ATM works by accepting Azure storage queue messages.  Each message initiates one unit of work.  Messages are handled in parallel according to the Webjob operational norm.  To get the scheduled behavior, simply set up messages to be sent at the right time of day.  Or hook the message transmission to your continuous integration mechanism.  Message samples are in the repo.
+ATM works by accepting Azure storage queue messages.  Each message initiates one unit of work.  Messages are handled in parallel according to the Webjob operational norm.  To get the scheduled behavior, simply set up messages to be sent at the right time of day.  Or hook the message transmission to your continuous integration mechanism.  Message samples are in the repo.  Look for files with "json" extension.
 
 Additional capabilities are being added.  Please post a comment if there are important use cases not currently covered.

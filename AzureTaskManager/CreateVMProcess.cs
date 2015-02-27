@@ -184,7 +184,8 @@ namespace AzureTaskManager
                             ConfigurationSets = sets,
                             OSVirtualHardDisk = disk,
                             RoleName = root.createvm.VM[0].Name, // this goes into the name of the status file for the VHD, it's also used for future operations on this VM
-                            RoleSize = root.createvm.VM[0].Size
+                            RoleSize = root.createvm.VM[0].Size,
+                            ProvisionGuestAgent = true
                         });
                     return resp.RequestId;
                 }
